@@ -1,0 +1,9 @@
+{
+	"name": "adf-kks",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "441cd3d5-4bc5-49d8-b94e-cc62a0bcd1b4",
+		"tenantId": "ae78eac8-ed9d-4d92-8c78-5c3a8762aebe"
+	}
+}

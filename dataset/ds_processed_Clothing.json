@@ -1,0 +1,64 @@
+{
+	"name": "ds_processed_Clothing",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "processed"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "B-25601",
+				"type": "String"
+			},
+			{
+				"name": "2018-04-01",
+				"type": "String"
+			},
+			{
+				"name": "Bharat",
+				"type": "String"
+			},
+			{
+				"name": "Gujarat",
+				"type": "String"
+			},
+			{
+				"name": "Ahmedabad",
+				"type": "String"
+			},
+			{
+				"name": "80.0",
+				"type": "String"
+			},
+			{
+				"name": "-56.0",
+				"type": "String"
+			},
+			{
+				"name": "4",
+				"type": "String"
+			},
+			{
+				"name": "Electronics",
+				"type": "String"
+			},
+			{
+				"name": "Electronic Games",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

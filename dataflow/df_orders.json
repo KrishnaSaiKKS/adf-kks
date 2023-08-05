@@ -1,0 +1,167 @@
+{
+	"name": "df_orders",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_adls_all_orders",
+						"type": "DatasetReference"
+					},
+					"name": "AllOrders"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_adls_order_details",
+						"type": "DatasetReference"
+					},
+					"name": "OrderDetails"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_processed_Electronics",
+						"type": "DatasetReference"
+					},
+					"name": "ElectronicsSink",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls",
+						"type": "LinkedServiceReference"
+					}
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_processed_Furniture",
+						"type": "DatasetReference"
+					},
+					"name": "FurnitureSink",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls",
+						"type": "LinkedServiceReference"
+					}
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_processed_Clothing",
+						"type": "DatasetReference"
+					},
+					"name": "Clothingsink",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SourceJoins"
+				},
+				{
+					"name": "SeperateElectronics"
+				},
+				{
+					"name": "selectReqColumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Order ID} as string,",
+				"          {Order Date} as date 'dd-MM-yyyy',",
+				"          CustomerName as string,",
+				"          State as string,",
+				"          City as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> AllOrders",
+				"source(output(",
+				"          {Order ID} as string,",
+				"          Amount as double,",
+				"          Profit as double,",
+				"          Quantity as short,",
+				"          Category as string,",
+				"          {Sub-Category} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrderDetails",
+				"AllOrders, OrderDetails join(AllOrders@{Order ID} == OrderDetails@{Order ID},",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> SourceJoins",
+				"selectReqColumns split(Category == \"Electronics\",",
+				"     Category == \"Furniture\",",
+				"     Category ==\"Clothing\",",
+				"     disjoint: true) ~> SeperateElectronics@(ElectronicsStream, FurnitureStream, ClothingStream)",
+				"SourceJoins select(mapColumn(",
+				"          {Order ID} = AllOrders@{Order ID},",
+				"          {Order Date},",
+				"          CustomerName,",
+				"          State,",
+				"          City,",
+				"          Amount,",
+				"          Profit,",
+				"          Quantity,",
+				"          Category,",
+				"          {Sub-Category}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectReqColumns",
+				"SeperateElectronics@ElectronicsStream sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Electronicsfile.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          {Order ID},",
+				"          {Order Date},",
+				"          CustomerName,",
+				"          State,",
+				"          City,",
+				"          Amount,",
+				"          Profit,",
+				"          Quantity,",
+				"          Category,",
+				"          {Sub-Category}",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> ElectronicsSink",
+				"SeperateElectronics@FurnitureStream sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Furniture.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> FurnitureSink",
+				"SeperateElectronics@ClothingStream sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {B-25601} as string,",
+				"          {2018-04-01} as string,",
+				"          Bharat as string,",
+				"          Gujarat as string,",
+				"          Ahmedabad as string,",
+				"          {80.0} as string,",
+				"          {-56.0} as string,",
+				"          {4} as string,",
+				"          Electronics as string,",
+				"          {Electronic Games} as string",
+				"     ),",
+				"     partitionFileNames:['Clothing.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Clothingsink"
+			]
+		}
+	}
+}
