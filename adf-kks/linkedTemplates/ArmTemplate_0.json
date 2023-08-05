@@ -597,7 +597,7 @@
 							"name": "SeperateElectronics"
 						},
 						{
-							"name": "selectOnlyReqColumns"
+							"name": "selectRequiredColumns"
 						}
 					],
 					"scriptLines": [
@@ -627,7 +627,7 @@
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> SourceJoins",
-						"selectOnlyReqColumns split(Category == \"Electronics\",",
+						"selectRequiredColumns split(Category == \"Electronics\",",
 						"     Category == \"Furniture\",",
 						"     Category ==\"Clothing\",",
 						"     disjoint: true) ~> SeperateElectronics@(ElectronicsStream, FurnitureStream, ClothingStream)",
@@ -644,7 +644,7 @@
 						"          {Sub-Category}",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> selectOnlyReqColumns",
+						"     skipDuplicateMapOutputs: true) ~> selectRequiredColumns",
 						"SeperateElectronics@ElectronicsStream sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     partitionFileNames:['Electronicsfile.csv'],",
