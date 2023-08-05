@@ -47,7 +47,7 @@
 						"referenceName": "ds_processed_Clothing",
 						"type": "DatasetReference"
 					},
-					"name": "Clothingsink",
+					"name": "ClothingSink",
 					"rejectedDataLinkedService": {
 						"referenceName": "ls_adls",
 						"type": "LinkedServiceReference"
@@ -160,7 +160,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> Clothingsink"
+				"     partitionBy('hash', 1)) ~> ClothingSink"
 			]
 		}
 	}
