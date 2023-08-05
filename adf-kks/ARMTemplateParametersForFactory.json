@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-kks"
+		},
+		"ls_adls_accountKey": {
+			"value": ""
+		},
+		"ls_git_adls_accountKey": {
+			"value": ""
+		},
+		"ls_adls_properties_typeProperties_url": {
+			"value": "https://adlskks.dfs.core.windows.net/"
+		},
+		"ls_git_adls_properties_typeProperties_url": {
+			"value": "https://adlskks.dfs.core.windows.net/"
+		}
+	}
+}
