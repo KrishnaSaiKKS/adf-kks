@@ -1,0 +1,6 @@
+{
+	"name": "kksvm-intergrationruntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
