@@ -648,7 +648,7 @@
 							"name": "SeperateElectronics"
 						},
 						{
-							"name": "selectRequiredColumns"
+							"name": "selectOnlyReqColumns"
 						}
 					],
 					"scriptLines": [
@@ -678,7 +678,7 @@
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> SourceJoins",
-						"selectRequiredColumns split(Category == \"Electronics\",",
+						"selectOnlyReqColumns split(Category == \"Electronics\",",
 						"     Category == \"Furniture\",",
 						"     Category ==\"Clothing\",",
 						"     disjoint: true) ~> SeperateElectronics@(ElectronicsStream, FurnitureStream, ClothingStream)",
@@ -695,7 +695,7 @@
 						"          {Sub-Category}",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> selectRequiredColumns",
+						"     skipDuplicateMapOutputs: true) ~> selectOnlyReqColumns",
 						"SeperateElectronics@ElectronicsStream sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     partitionFileNames:['Electronicsfile.csv'],",
@@ -758,6 +758,16 @@
 				"[concat(variables('factoryId'), '/datasets/ds_processed_Furniture')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_Clothing')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/kksvm-intergrationruntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
 		}
 	]
 }
